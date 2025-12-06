@@ -1,6 +1,7 @@
 
 
-/files
-/notFound
-/renamed
+files/
+notFound/
+renamed/
+
 list.json
