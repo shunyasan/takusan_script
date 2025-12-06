@@ -39,19 +39,31 @@ function main() {
 		// ディレクトリはスキップ
 		if (fs.statSync(srcPath).isDirectory()) continue;
 
-		// oldName マッチするルールを探す
-		const rule = nameMap.find((r) => r.oldName === filename);
+		// oldName にマッチするルールをすべて取得
+		const rules = nameMap.filter((r) => r.oldName === filename);
 
-		if (rule) {
-			// 一致 → renamed/** へ移動
-			const destPath = path.join(RENAMED_DIR, rule.newName);
-			fs.renameSync(srcPath, destPath);
-			console.log(`✔ Moved: ${filename} → renamed/${rule.newName}`);
+		if (rules.length > 0) {
+			// マッチするルールが1つ以上ある場合
+			rules.forEach((rule, index) => {
+				const destPath = path.join(RENAMED_DIR, rule.newName);
+
+				if (index === rules.length - 1) {
+					// 最後のルールは移動（元ファイルを削除）
+					fs.renameSync(srcPath, destPath);
+					console.log(`✔ 移動しました: ${filename} → renamed/${rule.newName}`);
+				} else {
+					// それ以外はコピー（元ファイルは残す）
+					fs.copyFileSync(srcPath, destPath);
+					console.log(
+						`✔ コピーしました: ${filename} → renamed/${rule.newName}`
+					);
+				}
+			});
 		} else {
 			// 見つからない → notFound/** へ移動
 			const destPath = path.join(NOT_FOUND_DIR, filename);
 			fs.renameSync(srcPath, destPath);
-			console.log(`✘ Not found: ${filename} → moved to notFound/`);
+			console.log(`✘ 見つかりません: ${filename} → notFound`);
 		}
 	}
 }
