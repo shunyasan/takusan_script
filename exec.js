@@ -6,13 +6,13 @@ const fs = require("fs");
 const path = require("path");
 
 // ディレクトリ設定（既存前提）
-const SRC_DIR = path.join(__dirname, "files");
-const RENAMED_DIR = path.join(__dirname, "renamed");
-const NOT_FOUND_DIR = path.join(__dirname, "notFound");
+const SRC_DIR = path.join(__dirname, "ファイル");
+const RENAMED_DIR = path.join(__dirname, "変更");
+const NOT_FOUND_DIR = path.join(__dirname, "スキップ");
 
-// ★ {oldName, newName} の置換ルール (list.json から読み込み)
+// ★ {oldName, newName} の置換ルール (リスト.json から読み込み)
 const nameMap = JSON.parse(
-	fs.readFileSync(path.join(__dirname, "list.json"), "utf-8")
+	fs.readFileSync(path.join(__dirname, "リスト.json"), "utf-8")
 );
 
 function main() {
